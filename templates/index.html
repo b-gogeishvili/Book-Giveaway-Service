@@ -2,15 +2,27 @@
 
 {% block content %}
 <div class="container">
-    <div class="row gy-4 my-15">
+    <div class="row gy-213 my-1">
             {% for book in all_books %}
             <div class="col-sm-6 col-md-4 col-lg-3">
                 <div class="card">
-                  <img src="{{ book.img_url }}" height="300" class="card-img-top" alt="...">
+                  <img width="200" height="400" src='{{ book.img_url }}' class="card-img-top" alt="thumbnail">
                   <div class="card-body">
-                    <h5 class="card-title">{{ book.title }}</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="btn btn-primary">Want</a>
+                    <h5 class="card-title" style="color:#5B54A0">{{ book.title }}</h5>
+                      <hr>
+                      <h6 class="card-title"> <b> Author: </b> {{ book.book_author }}</h6>
+                      <h6 class="card-title"> <b> Book Rating: </b> {{ book.rating }} ⭐</h6>
+                      <h6 class="card-title"> <b> Condition: </b> {{ book.condition }}</h6>
+                      <h6 class="card-title"> <b> Available at: </b> {{ book.loc }}</h6>
+                      <h6 class="card-title"> <b> Book Owner: </b> {{ book.author.email }}</h6>
+                      <hr>
+                    <p class="card-text" style="overflow: hidden; -webkit-line-clamp: 8; display: -webkit-box; -webkit-box-orient: vertical; "> <b> Description: </b>{{ book.description }}</p>
+                      {% if current_user.id == book.author_id or current_user.id == 1 %}
+                       <a href="{{ url_for('delete', book_id=book.id) }}" class="btn btn-danger">Delete</a>
+                      <a href="{{ url_for('edit', book_id=book.id) }}"  class="btn btn-warning">Edit</a>
+                      {% elif current_user.is_authenticated %}
+                    <a href="{{ url_for('want', book_id=book.id, current_user_id=current_user.id, user_id=book.author_id) }}" class="btn btn-primary">Want</a>
+                    {% endif %}
                   </div>
                 </div>
             </div>

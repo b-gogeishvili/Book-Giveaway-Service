@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row gy-4 my-15">
+            {% for each in books_to_display %}
+                {% if each.req_from == current_user.id %}
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card">
+                  <img width="200" height="400" src='{{ each.book_req.img_url }}' class="card-img-top" alt="thumbnail">
+                  <div class="card-body">
+                    <h5 class="card-title" style="color:#5B54A0">{{ each.book_req.title }}</h5>
+                      <hr>
+                      <h6 class="card-title"> <b> Author: </b> {{ each.book_req.book_author }}</h6>
+                      <h6 class="card-title"> <b> Book Rating: </b> {{ each.book_req.rating }} ⭐</h6>
+                      <h6 class="card-title"> <b> Condition: </b> {{ each.book_req.condition }}</h6>
+                      <h6 class="card-title"> <b> Available at: </b> {{ each.book_req.loc }}</h6>
+                      <h6 class="card-title"> <b> Book Owner: </b> {{ each.book_req.author.email }}</h6>
+                      <hr>
+                    <h6 class="card-title"> <b> Requested By: </b> {{each.req_from_email}} </h6>
+
+                  </div>
+                </div>
+            </div>
+                {% endif %}
+            {% endfor %}
+    </div>
+</div>
+{% endblock %}

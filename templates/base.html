@@ -33,7 +33,7 @@
                           Sort By
                       </a>
                       <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{ url_for('add_book') }}">Title</a></li>
+                        <li><a class="dropdown-item" href="">Title</a></li>
                         <li><a class="dropdown-item" href="#">Condition</a></li>
                       </ul>
                     </li>
@@ -43,8 +43,11 @@
                       </a>
                       <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{{ url_for('add_book') }}">Add Book</a></li>
-                        <li><a class="dropdown-item" href="#">Favorites</a></li>
-                        <li><a class="dropdown-item" href="#">Requests</a></li>
+                          <li><a class="dropdown-item" href="#">My Books</a></li>
+                          {% if current_user.id != 1 %}
+                        <li><a class="dropdown-item" href="{{ url_for('wishlist') }}">Wishlist</a></li>
+                          {% endif %}
+                        <li><a class="dropdown-item" href="{{ url_for('reqs') }}">Requests</a></li>
                       </ul>
                     </li>
                     <li class="nav-item">

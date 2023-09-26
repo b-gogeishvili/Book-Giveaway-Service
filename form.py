@@ -20,4 +20,12 @@ class LoginForm(FlaskForm):
 class BookForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
     book_author = StringField("Author", validators=[DataRequired()])
+    condition = StringField("Condition", validators=[DataRequired()])
+    loc = StringField("Available for pickup at", validators=[DataRequired()])
     submit = SubmitField("Add My Book!")
+
+
+class EditForm(FlaskForm):
+    condition = StringField("Condition", validators=[DataRequired()])
+    loc = StringField("Available for pickup at", validators=[DataRequired()])
+    submit = SubmitField("Edit!")

@@ -2,18 +2,38 @@
 
 {% block content %}
 <div class="container">
-    <div class="row gy-4 my-15">
+    <div class="row gy-3 my-15">
             {% for book in books %}
+                {% if "imageLinks" in book["volumeInfo"] %}
+                    {% if "description" in book["volumeInfo"] %}
+                    {% if "averageRating" in book["volumeInfo"] %}
             <div class="col-sm-6 col-md-4 col-lg-3">
                 <div class="card">
-                  <img src='{{ book["volumeInfo"]["imageLinks"]["thumbnail"] }}' class="card-img-top" alt="...">
+                    <img width="200" height="300" src='{{ book["volumeInfo"]["imageLinks"]["thumbnail"] }}' class="card-img-top" alt="thumbnail">
                   <div class="card-body">
-                    <h5 class="card-title">{{ book["volumeInfo"]["title"] }}</h5>
-                    <p class="card-text">{{ book["volumeInfo"]["description"] }}</p>
-                    <a href="#" class="btn btn-primary">Add</a>
+                    <h5 class="card-title" style="color:#5B54A0">{{ book["volumeInfo"]["title"] }}</h5>
+                      <hr>
+                      <h6 class="card-title"> <b> By: </b> {{ book["volumeInfo"]["authors"][0] }}</h6>
+                      <h6 class="card-title"> <b> Publishing Date: </b> {{ book["volumeInfo"]["publishedDate"] }}</h6>
+                      <h6 class="card-title"> <b> Rating: </b> {{ book["volumeInfo"]["averageRating"] }} ⭐</h6>
+                      <hr>
+                    <p class="card-text" style="overflow: hidden; -webkit-line-clamp: 5; display: -webkit-box; -webkit-box-orient: vertical; "> <b> Description: </b>{{ book["volumeInfo"]["description"] }}</p>
+                    <a href="{{ url_for('adding',
+                                title=book['volumeInfo']['title'],
+                                book_author=book['volumeInfo']['authors'][0],
+                                description=book['volumeInfo']['description'],
+                                rating=book['volumeInfo']['averageRating'],
+                                loc=loc,
+                                condition=condition,
+                                img_url=book['volumeInfo']['imageLinks']['thumbnail']
+                                ) }}" class="btn btn-primary">
+                        Add</a>
                   </div>
                 </div>
             </div>
+                    {% endif %}
+                    {% endif %}
+                {% endif %}
             {% endfor %}
     </div>
 </div>
