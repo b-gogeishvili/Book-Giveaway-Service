@@ -2,22 +2,24 @@
 
 {% block content %}
 <div class="container">
-    <div class="row gy-3 my-15">
-            {% for book in books %}
-                {% if "imageLinks" in book["volumeInfo"] %}
-                    {% if "description" in book["volumeInfo"] %}
-                    {% if "averageRating" in book["volumeInfo"] %}
-            <div class="col-sm-6 col-md-4 col-lg-3">
-                <div class="card">
-                    <img width="200" height="300" src='{{ book["volumeInfo"]["imageLinks"]["thumbnail"] }}' class="card-img-top" alt="thumbnail">
-                  <div class="card-body">
-                    <h5 class="card-title" style="color:#5B54A0">{{ book["volumeInfo"]["title"] }}</h5>
-                      <hr>
-                      <h6 class="card-title"> <b> By: </b> {{ book["volumeInfo"]["authors"][0] }}</h6>
-                      <h6 class="card-title"> <b> Publishing Date: </b> {{ book["volumeInfo"]["publishedDate"] }}</h6>
-                      <h6 class="card-title"> <b> Rating: </b> {{ book["volumeInfo"]["averageRating"] }} ⭐</h6>
-                      <hr>
-                    <p class="card-text" style="overflow: hidden; -webkit-line-clamp: 5; display: -webkit-box; -webkit-box-orient: vertical; "> <b> Description: </b>{{ book["volumeInfo"]["description"] }}</p>
+    <div class="row gy-5 my-10">
+        {% for book in books %}
+        {% if "imageLinks" in book["volumeInfo"] %}
+        {% if "description" in book["volumeInfo"] %}
+        {% if "averageRating" in book["volumeInfo"] %}
+        <div class="col-sm-6 col-md-5 col-lg-4">
+            <div class="card w-75 p-3 h-100" style="background-color: #ffb385">
+                <img src='{{ book["volumeInfo"]["imageLinks"]["thumbnail"] }}' class="card-img-top" alt="thumbnail">
+                <div class="card-body">
+                    <h5 class="card-title"><b>{{ book["volumeInfo"]["title"] }}</b></h5>
+                    <hr>
+                    <h6 class="card-title"><b> By: </b> {{ book["volumeInfo"]["authors"][0] }}</h6>
+                    <h6 class="card-title"><b> Publishing Date: </b> {{ book["volumeInfo"]["publishedDate"] }}</h6>
+                    <h6 class="card-title"><b> Rating: </b> {{ book["volumeInfo"]["averageRating"] }} ⭐</h6>
+                    <hr>
+                    <p class="card-text"
+                       style="overflow: hidden; -webkit-line-clamp: 5; display: -webkit-box; -webkit-box-orient: vertical; ">
+                        <b> Description: </b>{{ book["volumeInfo"]["description"] }}</p>
                     <a href="{{ url_for('adding',
                                 title=book['volumeInfo']['title'],
                                 book_author=book['volumeInfo']['authors'][0],
@@ -28,13 +30,13 @@
                                 img_url=book['volumeInfo']['imageLinks']['thumbnail']
                                 ) }}" class="btn btn-primary">
                         Add</a>
-                  </div>
                 </div>
             </div>
-                    {% endif %}
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
+        </div>
+        {% endif %}
+        {% endif %}
+        {% endif %}
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

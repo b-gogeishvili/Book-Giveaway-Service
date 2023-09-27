@@ -1,3 +1,4 @@
+# External Imports
 from flask import Flask, render_template, flash, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap5
@@ -5,10 +6,11 @@ from flask_login import LoginManager, login_user, UserMixin, current_user, logou
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
-
+# Local Imports
 from form import RegisterForm, LoginForm, BookForm, EditForm
 
-key = "AIzaSyBDHmv_vq36DeMkCrvmPTY89uaqtUXlEMA"
+# Initial Config
+API_KEY = "AIzaSyBDHmv_vq36DeMkCrvmPTY89uaqtUXlEMA"
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "ds321WQdas124AS;CokweqwSA"
 Bootstrap5(app)
@@ -17,6 +19,9 @@ Bootstrap5(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///library.db'
 db = SQLAlchemy()
 db.init_app(app)
+
+with app.app_context():
+    db.create_all()
 
 # Configure authentication
 login_manager = LoginManager()
@@ -28,6 +33,8 @@ def load_user(user_id):
     return db.get_or_404(User, user_id)
 
 
+# <--- Start of Database Entries --->
+
 class User(UserMixin, db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
@@ -37,7 +44,6 @@ class User(UserMixin, db.Model):
 
     posts = relationship("BookPost", back_populates="author")
     wishes = relationship("UserWish", back_populates="user_wish")
-    # reqs = relationship("UserReq", back_populates="user_req")
 
 
 class BookPost(db.Model):
@@ -55,7 +61,6 @@ class BookPost(db.Model):
     author = relationship("User", back_populates="posts")
 
     wishes = relationship("UserWish", back_populates="book_wish")
-    reqs = relationship("UserReq", back_populates="book_req")
 
 
 class UserWish(db.Model):
@@ -68,30 +73,42 @@ class UserWish(db.Model):
     book_wish_id = db.Column(db.Integer, db.ForeignKey("book_posts.id"))
     book_wish = relationship("BookPost", back_populates="wishes")
 
-
-class UserReq(db.Model):
-    __tablename__ = "user_req"
-    id = db.Column(db.String, unique=True, primary_key=True)
-    req_from = db.Column(db.String)
-    req_from_email = db.Column(db.String)
-
-    # user_req_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    # user_req = relationship("User", back_populates="reqs")
-
-    book_req_id = db.Column(db.Integer, db.ForeignKey("book_posts.id"))
-    book_req = relationship("BookPost", back_populates="reqs")
+    send_wish_to = db.Column(db.Integer, unique=False)
 
 
-with app.app_context():
-    db.create_all()
+# <--- End of Database Entries --->
 
 
+# <--- Home --->
 @app.route("/")
 def home():
     all_books = db.session.execute(db.select(BookPost).order_by(BookPost.title)).scalars()
     return render_template("index.html", all_books=all_books)
 
 
+# <--- Search and Filter --->
+
+
+# <--- NavBar Routes --->
+@app.route("/my_books")
+def my_books():
+    result = db.session.execute(db.select(BookPost).where(BookPost.author_id == current_user.id)).scalars().all()
+    return render_template("user_books.html", all_books=result)
+
+
+@app.route("/wishlist")
+def wishlist():
+    wishes = db.session.execute(db.Select(UserWish)).scalars().all()
+    return render_template("wishlist.html", books_to_display=wishes)
+
+
+@app.route("/requests")
+def reqs():
+    all_reqs = db.session.execute(db.Select(UserWish)).scalars().all()
+    return render_template("requests.html", books_to_display=all_reqs)
+
+
+# <--- Adding Books --->
 @app.route("/add_book", methods=["POST", "GET"])
 def add_book():
     form = BookForm()
@@ -109,9 +126,12 @@ def select():
     book_author = request.args.get("book_author")
     condition = request.args.get("condition")
     loc = request.args.get("loc")
+
+    # Google Books API
     url = (f"https://www.googleapis.com/books/v1/volumes?q={title}+inauthor:{book_author}&orderBy=relevance"
-           f"&langRestrict=en&key={key}")
+           f"&langRestrict=en&key={API_KEY}")
     data = requests.get(url).json()["items"]
+
     return render_template("select.html", books=data, condition=condition, loc=loc)
 
 
@@ -133,6 +153,7 @@ def adding():
     return redirect(url_for("home"))
 
 
+# <--- Managing Books --->
 @app.route("/edit/<int:book_id>", methods=["POST", "GET"])
 def edit(book_id):
     form = EditForm()
@@ -160,8 +181,11 @@ def delete():
 
 @app.route("/want", methods=["POST", "GET"])
 def want():
+    already_added = False
+
     book_wish_id = request.args.get("book_id")
     user_wish_id = request.args.get("current_user_id")
+    send_wish_to = request.args.get("user_id")
     wish_id = str(user_wish_id) + str(book_wish_id)
 
     result = db.session.execute(db.select(UserWish).where(UserWish.id == wish_id)).scalar()
@@ -169,42 +193,21 @@ def want():
         new_wish = UserWish(
             id=wish_id,
             user_wish_id=user_wish_id,
-            book_wish_id=book_wish_id
+            book_wish_id=book_wish_id,
+            send_wish_to=send_wish_to
         )
         db.session.add(new_wish)
         db.session.commit()
     else:
-        flash("Already in your wishlist!")  # fix
-        return redirect(url_for("home"))
+        # If its already added, wishlist page should output that message
+        book = result.book_wish.title
+        already_added = True
+        return redirect(url_for("wishlist", added=already_added, book=book))
 
-    book_req_id = book_wish_id
-    user_req_id = request.args.get("user_id")
-    req_id = str(user_req_id) + str(book_req_id)
-
-    new_req = UserReq(
-        id=req_id,
-        req_from=current_user.name,
-        req_from_email=current_user.email,
-        user_req_id=user_req_id,
-        book_req_id=book_req_id
-    )
-    db.session.add(new_req)
-    db.session.commit()
     return redirect(url_for("wishlist"))
 
 
-@app.route("/wishlist")
-def wishlist():
-    wishes = db.session.execute(db.Select(UserWish)).scalars().all()
-    return render_template("wishlist.html", books_to_display=wishes)
-
-
-@app.route("/requests")
-def reqs():
-    all_reqs = db.session.execute(db.Select(UserReq)).scalars().all()
-    return render_template("requests.html", books_to_display=all_reqs)
-
-
+# <--- Authentication --->
 @app.route("/register", methods=["POST", "GET"])
 def register():
     form = RegisterForm()

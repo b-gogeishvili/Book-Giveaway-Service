@@ -1,5 +1,6 @@
+# Setting Up Flask_WTF Forms
 from flask_wtf import FlaskForm
-from wtforms import StringField, EmailField, PasswordField, SubmitField
+from wtforms import StringField, EmailField, PasswordField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Email
 import email_validator
 
@@ -20,7 +21,10 @@ class LoginForm(FlaskForm):
 class BookForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
     book_author = StringField("Author", validators=[DataRequired()])
-    condition = StringField("Condition", validators=[DataRequired()])
+    condition = SelectField("Condition",
+                            choices=["New", "Like New", "Very Good", "Good", "Acceptable", "Bad"],
+                            validators=[DataRequired()]
+                            )
     loc = StringField("Available for pickup at", validators=[DataRequired()])
     submit = SubmitField("Add My Book!")
 

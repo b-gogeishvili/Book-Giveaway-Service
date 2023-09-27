@@ -1,69 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
     <title>Book Giveaway Service</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css')}}"/>
-  </head>
-  <body>
+</head>
+<body>
 
-     <nav class="navbar navbar-expand-lg fixed-top bg-body-tertiary">
-      <div class="container-fluid">
+<nav class="navbar navbar-expand-lg fixed-top navbar-custom">
+    <div class="container-fluid">
         <a class="navbar-brand" href="/">Books</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">API</a>
-            </li>
-            {% if not current_user.is_authenticated: %}
-                    <li class="nav-item">
-                     <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-                    </li>
-                   <li class="nav-item">
-                      <a class="nav-link" href="{{ url_for('register') }}">Register</a>
-                    </li>
-               {% else %}
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          Sort By
-                      </a>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="">Title</a></li>
-                        <li><a class="dropdown-item" href="#">Condition</a></li>
-                      </ul>
-                    </li>
-                   <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          {{current_user.name}}
-                      </a>
-                      <ul class="dropdown-menu">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#"
+                       style="position:relative; margin:0px 425px 0px 20px;">API</a>
+                </li>
+
+
+                {% if not current_user.is_authenticated: %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('login') }} "
+                       style="position:relative; margin:0px 0px 0px 270px;">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+                </li>
+
+                {% else %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        {{current_user.name}}
+                    </a>
+                    <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{{ url_for('add_book') }}">Add Book</a></li>
-                          <li><a class="dropdown-item" href="#">My Books</a></li>
-                          {% if current_user.id != 1 %}
+                        <li><a class="dropdown-item" href="{{ url_for('my_books') }}">My Books</a></li>
+                        {% if current_user.id != 1 %}
                         <li><a class="dropdown-item" href="{{ url_for('wishlist') }}">Wishlist</a></li>
-                          {% endif %}
+                        {% endif %}
                         <li><a class="dropdown-item" href="{{ url_for('reqs') }}">Requests</a></li>
-                      </ul>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
-                    </li>
-             {% endif %}
-          </ul>
-          <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-primary" type="submit">Search</button>
-          </form>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false" style="position:relative; margin:0px 0px 0px 130px;">
+                        Filter By Condition
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="">New</a></li>
+                        <li><a class="dropdown-item" href="#">Like New</a></li>
+                        <li><a class="dropdown-item" href="#">Very Good</a></li>
+                        <li><a class="dropdown-item" href="#">Good</a></li>
+                        <li><a class="dropdown-item" href="#">Acceptable</a></li>
+                        <li><a class="dropdown-item" href="#">Bad</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Sort By
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="">Title</a></li>
+                        <li><a class="dropdown-item" href="#">Rating </a></li>
+                    </ul>
+                </li>
+                {% endif %}
+            </ul>
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
         </div>
-      </div>
-    </nav>
-     {% block content %}
-     {% endblock %}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-  </body>
+    </div>
+</nav>
+{% block content %}
+{% endblock %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
 </html>
