@@ -21,14 +21,14 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#"
-                       style="position:relative; margin:0px 425px 0px 20px;">API</a>
+                     style="position:relative; margin:0px 100px 0px 10px;"  >API</a>
                 </li>
 
 
                 {% if not current_user.is_authenticated: %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('login') }} "
-                       style="position:relative; margin:0px 0px 0px 270px;">Login</a>
+                       >Login</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('register') }}">Register</a>
@@ -56,7 +56,7 @@
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                       aria-expanded="false" style="position:relative; margin:0px 0px 0px 130px;">
+                       aria-expanded="false" style="position:relative; margin:0px 0px 0px 100px;">
                         Filter By Condition
                     </a>
                     <ul class="dropdown-menu">
