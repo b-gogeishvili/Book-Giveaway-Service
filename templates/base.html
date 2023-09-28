@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='assets/favicon_shelf.ico')}}">
     <title>Book Giveaway Service</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -60,12 +61,12 @@
                         Filter By Condition
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="">New</a></li>
-                        <li><a class="dropdown-item" href="#">Like New</a></li>
-                        <li><a class="dropdown-item" href="#">Very Good</a></li>
-                        <li><a class="dropdown-item" href="#">Good</a></li>
-                        <li><a class="dropdown-item" href="#">Acceptable</a></li>
-                        <li><a class="dropdown-item" href="#">Bad</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('filter', filter_by='New') }}">New</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('filter', filter_by='Like New') }}">Like New</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('filter', filter_by='Very Good') }}">Very Good</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('filter', filter_by='Good') }}">Good</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('filter', filter_by='Acceptable') }}">Acceptable</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('filter', filter_by='Bad') }}">Bad</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -74,14 +75,14 @@
                         Sort By
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="">Title</a></li>
-                        <li><a class="dropdown-item" href="#">Rating </a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('sort', sort_by='time') }}">Time Added</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('sort', sort_by='rating') }}">Rating </a></li>
                     </ul>
                 </li>
                 {% endif %}
             </ul>
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <form class="d-flex" role="search" action="{{ url_for('search') }}" method="post">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="title">
                 <button class="btn btn-primary" type="submit">Search</button>
             </form>
         </div>

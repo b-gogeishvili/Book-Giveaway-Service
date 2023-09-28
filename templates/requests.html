@@ -21,8 +21,8 @@
                     <h6 class="card-title"><b> Requested By: </b> {{each.user_wish.name}} </h6>
                     <h6 class="card-title"><b> Contact: </b> {{each.user_wish.email}} </h6>
                     <hr>
-                    <a href="#" class="btn btn-danger">Delete</a>
-                    <a href="#" class="btn btn-success">Accept</a>
+                    <a href="{{ url_for('delete_req', req_id=each.id) }}" class="btn btn-danger">Delete</a>
+                    <a href="{{ url_for('accept_req', req_id=each.id, user_email=each.user_wish.email, book_id=each.book_wish.id, book_title=each.book_wish.title, book_owner_email=each.book_wish.author.email, book_loc=each.book_wish.loc) }}" class="btn btn-success">Accept</a>
                 </div>
             </div>
         </div>

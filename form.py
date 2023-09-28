@@ -30,6 +30,9 @@ class BookForm(FlaskForm):
 
 
 class EditForm(FlaskForm):
-    condition = StringField("Condition", validators=[DataRequired()])
+    condition = SelectField("Condition",
+                            choices=["New", "Like New", "Very Good", "Good", "Acceptable", "Bad"],
+                            validators=[DataRequired()]
+                            )
     loc = StringField("Available for pickup at", validators=[DataRequired()])
     submit = SubmitField("Edit!")
