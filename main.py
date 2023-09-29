@@ -1,10 +1,9 @@
 # External Imports
 from flask import Flask, render_template, flash, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import desc
+from sqlalchemy.orm import relationship
 from flask_bootstrap import Bootstrap5
 from flask_login import LoginManager, login_user, UserMixin, current_user, logout_user
-from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 import datetime as dt
@@ -105,15 +104,15 @@ def sort():
     if sort_by == "time":
         all_books = BookPost.query.order_by(BookPost.id.desc()).all()
     else:
-        all_books = all_books = BookPost.query.order_by(BookPost.rating.desc()).all()
+        all_books = BookPost.query.order_by(BookPost.rating.desc()).all()
 
     return render_template("index.html", all_books=all_books)
 
 
 @app.route("/filter-by")
-def filter():
-    filterBy = request.args.get("filter_by")
-    all_books = BookPost.query.filter_by(condition=filterBy).all()
+def filter_query_by():
+    filter_queries = request.args.get("filter_by")
+    all_books = BookPost.query.filter_by(condition=filter_queries).all()
 
     return render_template("index.html", all_books=all_books)
 
@@ -124,6 +123,7 @@ def search():
     all_books = BookPost.query.filter_by(title=title).all()
 
     return render_template("index.html", all_books=all_books)
+
 
 # <--- NavBar Routes --->
 @app.route("/my-books")
@@ -262,8 +262,6 @@ def delete():
 
 @app.route("/want", methods=["POST", "GET"])
 def want():
-    already_added = False
-
     book_wish_id = request.args.get("book_id")
     user_wish_id = request.args.get("current_user_id")
     send_wish_to = request.args.get("user_id")
@@ -271,10 +269,10 @@ def want():
 
     result = db.session.execute(db.select(UserWish).where(UserWish.id == wish_id)).scalar()
     if not result:
-        NOW = dt.datetime.now().strftime("%m/%d/%Y - %H:%M")
+        now = dt.datetime.now().strftime("%m/%d/%Y - %H:%M")
         new_wish = UserWish(
             id=wish_id,
-            time=NOW,
+            time=now,
             user_wish_id=user_wish_id,
             book_wish_id=book_wish_id,
             send_wish_to=send_wish_to
