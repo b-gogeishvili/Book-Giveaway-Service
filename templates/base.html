@@ -20,11 +20,17 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                {% if current_user.is_authenticated: %}
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#"
+                    <a class="nav-link active" aria-current="page" href="/swagger/" target="_blank"
                        style="position:relative; margin:0px 100px 0px 10px;">API</a>
                 </li>
-
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{{ url_for('not_authenticated') }}" target="_blank"
+                       style="position:relative; margin:0px 100px 0px 10px;">API</a>
+                </li>
+                {% endif %}
 
                 {% if not current_user.is_authenticated: %}
                 <li class="nav-item">
