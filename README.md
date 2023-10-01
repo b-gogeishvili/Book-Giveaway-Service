@@ -58,6 +58,6 @@ Or check the running images with:
  docker ps
 ```
 
-- [@b-gogeishvili](https://www.github.com/octokatherine](https://github.com/b-gogeishvili)https://github.com/b-gogeishvili)
-- [Contact](gogeishvilib@gmail.com)
+- [@b-gogeishvili](https://github.com/b-gogeishvili)
+- [LinkedIn]((https://www.linkedin.com/in/besikgogeishvili/))
 - [Docker Hub](https://hub.docker.com/r/20004/book_library)
