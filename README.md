@@ -19,9 +19,35 @@ I have created an API for my website and documented it with Swagger.
 - CRUD Operations on books
 - Dockerized
 
+  
 
+## Use Docker to set up this Project
 
-## Setting up this project on PyCharm
+#### Install my project with Docker
+Run the following commands:
+
+```bash
+docker pull 20004/book-lib-docker
+```
+
+```bash
+docker run -d -p 5000:5000 20004/book-lib-docker
+```
+
+You can stop the container with:
+```bash
+docker stop 20004/book-lib-docker
+```
+```bash
+docker container prune
+```
+
+Or check the running images with:
+```bash
+docker ps -a
+```
+
+## Or set this project up on PyCharm
 
 1) Download this project as a zip file.
 
@@ -33,30 +59,6 @@ I have created an API for my website and documented it with Swagger.
 ![PyCharm](https://img-c.udemycdn.com/redactor/raw/article_lecture/2023-07-26_12-08-47-69e6743627b107a1734fa8832618060b.png)
 
 This should do the trick. However, if you still see any red underlines in your main.py then tell PyCharm to check the virtual environment and dependencies again by going to File -> Reload All from Disk.
-
-
-## Docker
-
-#### Install my project with Docker
-Run the following commands:
-
-```bash
- docker pull 20004/book_library:latest
-```
-
-```bash
- docker run -d -p 5000:5000 20004/book_library:latest
-```
-
-You can stop the container with:
-```bash
- docker stop 20004/book_library:latest
-```
-
-Or check the running images with:
-```bash
- docker ps
-```
 
 - [@b-gogeishvili](https://github.com/b-gogeishvili)
 - [LinkedIn](https://www.linkedin.com/in/besikgogeishvili/)
