@@ -59,5 +59,5 @@ Or check the running images with:
 ```
 
 - [@b-gogeishvili](https://github.com/b-gogeishvili)
-- [LinkedIn]((https://www.linkedin.com/in/besikgogeishvili/))
+- [LinkedIn](https://www.linkedin.com/in/besikgogeishvili/)
 - [Docker Hub](https://hub.docker.com/r/20004/book_library)
