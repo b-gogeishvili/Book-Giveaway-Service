@@ -34,9 +34,9 @@ docker pull 20004/book-lib-docker
 docker run -d -p 5000:5000 20004/book-lib-docker
 ```
 
-You can stop the container with:
+You can stop the container with (you can get container id with - "docker ps"):
 ```bash
-docker stop 20004/book-lib-docker
+docker stop <CONTAINER ID>
 ```
 ```bash
 docker container prune
