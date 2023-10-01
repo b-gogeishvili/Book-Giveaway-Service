@@ -1,8 +1,9 @@
 # External Imports
-from flask import Flask, render_template, flash, redirect, url_for, request
+from flask import Flask, render_template, flash, redirect, url_for, request, Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from flask_bootstrap import Bootstrap5
+from flask_restx import Resource, Namespace, fields, Api
 from flask_login import LoginManager, login_user, UserMixin, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
@@ -16,6 +17,7 @@ API_KEY = "AIzaSyBDHmv_vq36DeMkCrvmPTY89uaqtUXlEMA"
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "ds321WQdas124AS;CokweqwSA"
 Bootstrap5(app)
+blueprint = Blueprint("Book Library Api", __name__, url_prefix="/swagger")
 
 # GMAIL TEST ACCOUNT
 GMAIL_ACCOUNT = "testforpython999@gmail.com"
@@ -23,6 +25,12 @@ GMAIL_PASSWORD = "fger kqni xcrc csko "
 # SMTP SERVER INFO
 GMAIL_SMTP_SERVER = "smtp.gmail.com"
 PORT = 587
+
+# Configure API
+api = Api(blueprint)
+ns = Namespace("api")
+app.register_blueprint(blueprint)
+api.add_namespace(ns)
 
 # Configure Database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///library.db'
@@ -41,7 +49,7 @@ def load_user(user_id):
 
 # <--- Start of Database Entries --->
 
-class User(UserMixin, db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True)
@@ -86,8 +94,140 @@ class UserWish(db.Model):
 with app.app_context():
     db.create_all()
 
-
 # <--- End of Database Entries --->
+
+
+# <--- SWAGGER API --->
+
+
+# API Models
+
+book_model = api.model("Books", {
+    "id": fields.Integer,
+    "title": fields.String,
+    "book_author": fields.String,
+    "description": fields.String,
+    "loc": fields.String,
+    "rating": fields.String,
+    "condition": fields.String,
+    "img_url": fields.String,
+    "author_id": fields.Integer
+})
+
+book_input_model = api.model("BookInput", {
+    "title": fields.String,
+    "book_author": fields.String,
+    "description": fields.String,
+    "loc": fields.String,
+    "rating": fields.String,
+    "condition": fields.String,
+    "img_url": fields.String,
+})
+
+book_patch_model = api.model("BookPatchInput", {
+    "loc": fields.String,
+    "condition": fields.String,
+})
+
+user_model = api.model("Users", {
+    "id": fields.Integer,
+    "email": fields.String,
+    "name": fields.String,
+})
+
+user_posts_model = api.model("UserWithBooks", {
+    "id": fields.Integer,
+    "email": fields.String,
+    "name": fields.String,
+    "posts": fields.List(fields.Nested(book_model))
+})
+
+
+# API Routes and Methods
+
+@ns.route("/users")
+class UserListAPI(Resource):
+    @ns.marshal_list_with(user_model)
+    def get(self):
+        return User.query.all()
+
+
+@ns.route("/users_posts")
+class UserAndPostsAPI(Resource):
+    @ns.marshal_list_with(user_posts_model)
+    def get(self):
+        return User.query.all()
+
+
+@ns.route("/books")
+class BookListAPI(Resource):
+    @ns.marshal_list_with(book_model)
+    def get(self):
+        return BookPost.query.all()
+
+    @ns.expect(book_input_model)
+    @ns.marshal_with(book_model)
+    def post(self):
+        book = BookPost(
+            title=ns.payload["title"],
+            book_author=ns.payload["book_author"],
+            description=ns.payload["description"],
+            loc=ns.payload["loc"],
+            rating=ns.payload["rating"],
+            condition=ns.payload["condition"],
+            img_url=ns.payload["img_url"],
+            author_id=current_user.id
+
+        )
+        db.session.add(book)
+        db.session.commit()
+        return book, 201
+
+
+@ns.route("/books/<int:id>")
+class BookIdAPI(Resource):
+    @ns.marshal_list_with(book_model)
+    def get(self, id):
+        return BookPost.query.get(id)
+
+    @ns.expect(book_patch_model)
+    @ns.marshal_with(book_model)
+    def patch(self, id):
+        book = BookPost.query.get(id)
+        book.loc = ns.payload["loc"]
+        book.condition = ns.payload["condition"]
+        db.session.commit()
+        return book
+
+    def delete(self, id):
+        book = BookPost.query.get(id)
+        db.session.delete(book)
+        db.session.commit()
+        return {}, 204
+
+
+@ns.route("/books/filter_by_author/<string:book_author>")
+class BookAuthorFilter(Resource):
+    @ns.marshal_list_with(book_model)
+    def get(self, book_author):
+        book = BookPost.query.filter_by(book_author=book_author).all()
+        print(book)
+        return book
+
+
+@ns.route("/books/filter_by_condition/<string:condition>")
+class BookConditionFilter(Resource):
+    @ns.marshal_list_with(book_model)
+    def get(self, condition):
+        book = BookPost.query.filter_by(condition=condition).all()
+        print(book)
+        return book
+
+
+# <--- End of API DOC --->
+
+
+# !!! <--- WEBSITE ---> !!!
 
 
 # <--- Home --->
@@ -348,6 +488,11 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for("home"))
+
+
+@app.route("/not_authenticated")
+def not_authenticated():
+    return render_template("not_authenticated.html")
 
 
 if __name__ == "__main__":
