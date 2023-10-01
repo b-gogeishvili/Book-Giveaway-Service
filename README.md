@@ -45,12 +45,12 @@ Run the following commands:
 ```
 
 ```bash
- docker container run -d -p 5000:5000 20004/book_library:latest
+ docker run -d -p 5000:5000 20004/book_library:latest
 ```
 
 You can stop the container with:
 ```bash
- docker container stop 20004/book_library:latest
+ docker stop 20004/book_library:latest
 ```
 
 Or check the running images with:
