@@ -10,6 +10,17 @@ Users can add books with Google Books API, for better user experience. They can 
 I have created an API for my website and documented it with Swagger.
 
 
+## Features
+
+- Google API
+- RESTful API
+- Swagger Documentation for my API
+- Flask authentication
+- CRUD Operations on books
+- Dockerized
+
+
+
 ## Setting up this project on PyCharm
 
 1) Download this project as a zip file.
@@ -39,10 +50,13 @@ Run the following commands:
 
 You can stop the container with:
 ```bash
- docker container stop book_library:latest
+ docker container stop 20004/book_library:latest
 ```
 
 Or check the running images with:
 ```bash
  docker ps
 ```
+
+- [@b-gogeishvili]([https://www.github.com/octokatherine](https://github.com/b-gogeishvili)https://github.com/b-gogeishvili)
+- [Docker Hub](https://hub.docker.com/r/20004/book_library)
