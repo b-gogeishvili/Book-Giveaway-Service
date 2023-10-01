@@ -1,0 +1,11 @@
+Bootstrap_Flask==2.2.0
+email_validator==2.0.0.post2
+Flask==2.3.2
+Flask_Login==0.6.2
+flask_restx==1.1.0
+flask_sqlalchemy==3.1.1
+Flask_WTF==1.1.1
+Requests==2.31.0
+SQLAlchemy==2.0.20
+Werkzeug==2.3.7
+WTForms==3.0.1
