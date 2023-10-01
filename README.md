@@ -1,6 +1,6 @@
 # Book Giveaway Service
 
-This is a book library website. Users can register and add their owned books, and other registered users can add those books to their wishlist. Process is simple, a user requests a book, and book owner can either accept it or reject it. If the book is accepted, an user who added it to their wishlist gets an email about accepted book's details.
+This is a book library website. Users can register and add their owned books, and other registered users can add those books to their wishlist. Process is simple, a user requests a book, and book owner can either accept it or reject it. If the book is accepted, an user who added it to their wishlist gets an email about accepted book's details. !!! When adding books, use real book name and author, in order for Google API to work.
 
 ### Books and Gooogle API
 
