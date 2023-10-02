@@ -34,7 +34,7 @@ You can change 3000 to anything that works for you.
 ```bash
 docker run -d -p 3000:5000 20004/book-lib-docker
 ```
-Website is running now. Visit "127.0.0.1:3000/" or "localhost:3000".
+Website is running now. Visit "127.0.0.1:3000/" or "localhost:3000/".
 
 You can stop the container with (you can get container id with - "docker ps" command):
 ```bash
