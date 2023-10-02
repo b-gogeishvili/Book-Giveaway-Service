@@ -14,9 +14,9 @@ I have created an API for my website and documented it with Swagger.
 
 - Google API
 - RESTful API
-- Swagger Documentation for my API
-- Flask authentication
-- CRUD Operations on books
+- Swagger Documentation
+- Flask Authentication
+- CRUD Operations with SQLite
 - Dockerized
 
   
