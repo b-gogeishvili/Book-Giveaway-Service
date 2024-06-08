@@ -12,6 +12,9 @@ import smtplib
 # Local Imports
 from form import RegisterForm, LoginForm, BookForm, EditForm
 
+# May need
+# Werkzeug==2.3.7
+
 # Initial Config
 API_KEY = "AIzaSyBDHmv_vq36DeMkCrvmPTY89uaqtUXlEMA"
 app = Flask(__name__)
